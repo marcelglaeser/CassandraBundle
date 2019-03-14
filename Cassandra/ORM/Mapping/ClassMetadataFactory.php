@@ -161,7 +161,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
      *
      * NOTE: This is only useful in very special cases, like when generating proxy classes.
      *
-     * @param string        $className
+     * @param string $className
      * @param ClassMetadata $class
      */
     public function setMetadataFor($className, $class)
@@ -186,6 +186,7 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
             $classMetadata->table['primaryKeys'] = $classAnnotation->primaryKeys;
             $classMetadata->table['defaultTtl'] = $classAnnotation->defaultTtl;
             $classMetadata->table['ifNoExist'] = $classAnnotation->ifNoExist;
+            $classMetadata->table['tableOptions'] = $classAnnotation->tableOptions;
         }
 
         // Save the field mapping to metadata
@@ -234,12 +235,12 @@ class ClassMetadataFactory implements ClassMetadataFactoryInterface
     protected function getFqcnFromAlias($namespaceAlias, $simpleClassName)
     {
         if (count($this->mappingsConfig) <= 0) {
-            return $namespaceAlias."\\Entity\\".$simpleClassName;
+            return $namespaceAlias . "\\Entity\\" . $simpleClassName;
         }
 
         foreach ($this->mappingsConfig as $name => $config) {
             if ($namespaceAlias == $name) {
-                return $config['prefix']."\\".$simpleClassName;
+                return $config['prefix'] . "\\" . $simpleClassName;
             }
         }
     }
