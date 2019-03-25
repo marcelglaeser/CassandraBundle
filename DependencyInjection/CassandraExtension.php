@@ -33,10 +33,45 @@ class CassandraExtension extends Extension
         }
         $this->metadataFactoryLoad($container, $ormConfig);
 
+        $this->validateEntityManagerConfiguration($ormConfig['default_entity_manager'], $ormConfig['entity_managers']);
         foreach ($config['connections'] as $connectionId => $connectionConfig) {
+            $emConfig = $this->getEntityManagerConfiguration(
+                $connectionId,
+                $ormConfig['default_entity_manager'],
+                $ormConfig['entity_managers']
+            );
             $connectionConfig['dispatch_events'] = $config['dispatch_events'];
-            $this->ormLoad($container, $connectionId, $connectionConfig);
+            $this->ormLoad($container, $connectionId, $connectionConfig, $emConfig);
         }
+    }
+
+    /**
+     * @param  $defaultEmName
+     * @param  $emConfigs
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function validateEntityManagerConfiguration($defaultEmName, $emConfigs)
+    {
+        if (!isset($emConfigs[$defaultEmName])) {
+            throw new \InvalidArgumentException('Undefined default entity manager in config "orm.entity_managers"');
+        }
+    }
+
+    /**
+     * @param string $connectionId
+     * @param string $defaultEmName
+     * @param array  $emConfigs
+     *
+     * @return array
+     */
+    private function getEntityManagerConfiguration($connectionId, $defaultEmName, $emConfigs)
+    {
+        if (isset($emConfigs[$connectionId])) {
+            return $emConfigs[$connectionId];
+        }
+
+        return $emConfigs[$defaultEmName];
     }
 
     protected function metadataFactoryLoad(ContainerBuilder $container, array $config)
@@ -53,7 +88,7 @@ class CassandraExtension extends Extension
         }
     }
 
-    protected function ormLoad(ContainerBuilder $container, $connectionId, array $config)
+    protected function ormLoad(ContainerBuilder $container, $connectionId, array $config, array $emConfig)
     {
         $class = 'CassandraBundle\\Cassandra\\Connection';
         $definition = new Definition($class);
@@ -72,6 +107,7 @@ class CassandraExtension extends Extension
             ->addArgument(new Reference(sprintf('cassandra.connection.%s', $connectionId)))
             ->addArgument(new Reference('cassandra.factory.metadata'))
             ->addArgument(new Reference('logger'))
+            ->addArgument($emConfig)
             ->setPublic(true);
     }
 
