@@ -11,10 +11,12 @@ class SchemaCreate
         $this->container = $container;
     }
 
-    public function execute($connection = 'default')
+    public function execute($connection = 'default', $dumpCql = false)
     {
         $em = $this->container->get(sprintf('cassandra.%s_entity_manager', $connection));
         $schemaManager = $em->getSchemaManager();
+        $dumpOutput = [];
+        $schemaManager->forceDumpCql($dumpCql);
 
         $entityDirectoriesRegexp = '/src\/.*Entity\//';
         $entityDirectories = $em->getTargetedEntityDirectories();
@@ -49,13 +51,15 @@ class SchemaCreate
                 $tableOptions = $metadata->table['tableOptions'];
 
                 if ($tableName) {
-                    $schemaManager->dropTable($tableName);
-                    $schemaManager->createTable($tableName, $metadata->fieldMappings, $primaryKeys, $tableOptions);
-                    $schemaManager->createIndexes($tableName, $indexes);
+                    $dumpOutput[] = $schemaManager->dropTable($tableName);
+                    $dumpOutput[] = $schemaManager->createTable($tableName, $metadata->fieldMappings, $primaryKeys, $tableOptions);
+                    $dumpOutput[] = $schemaManager->createIndexes($tableName, $indexes);
                 }
             }
         }
 
         $em->closeAsync();
+
+        return $dumpOutput;
     }
 }
