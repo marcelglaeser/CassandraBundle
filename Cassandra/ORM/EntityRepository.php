@@ -91,9 +91,9 @@ class EntityRepository
         return $this->_em->getOneOrNullResult($statement, $arguments);
     }
 
-    public function getResult($statement, $arguments)
+    public function getResult($statement)
     {
-        return $this->_em->getResult($statement, $arguments);
+        return $this->_em->getResult($this->_class, $statement);
     }
 
     public function createQuery($cql)
