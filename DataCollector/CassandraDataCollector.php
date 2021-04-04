@@ -6,6 +6,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use CassandraBundle\EventDispatcher\CassandraEvent;
+use Cassandra;
 
 /**
  * Collect information about cassandra command.
@@ -18,17 +19,17 @@ class CassandraDataCollector extends DataCollector
      * @var array
      */
     protected static $consistency = [
-        \Cassandra::CONSISTENCY_ANY => 'any',
-        \Cassandra::CONSISTENCY_ONE => 'one',
-        \Cassandra::CONSISTENCY_TWO => 'two',
-        \Cassandra::CONSISTENCY_THREE => 'three',
-        \Cassandra::CONSISTENCY_QUORUM => 'quorum',
-        \Cassandra::CONSISTENCY_ALL => 'all',
-        \Cassandra::CONSISTENCY_LOCAL_QUORUM => 'local quorum',
-        \Cassandra::CONSISTENCY_EACH_QUORUM => 'each quorum',
-        \Cassandra::CONSISTENCY_SERIAL => 'serial',
-        \Cassandra::CONSISTENCY_LOCAL_SERIAL => 'local serial',
-        \Cassandra::CONSISTENCY_LOCAL_ONE => 'local one',
+        Cassandra::CONSISTENCY_ANY => 'any',
+        Cassandra::CONSISTENCY_ONE => 'one',
+        Cassandra::CONSISTENCY_TWO => 'two',
+        Cassandra::CONSISTENCY_THREE => 'three',
+        Cassandra::CONSISTENCY_QUORUM => 'quorum',
+        Cassandra::CONSISTENCY_ALL => 'all',
+        Cassandra::CONSISTENCY_LOCAL_QUORUM => 'local quorum',
+        Cassandra::CONSISTENCY_EACH_QUORUM => 'each quorum',
+        Cassandra::CONSISTENCY_SERIAL => 'serial',
+        Cassandra::CONSISTENCY_LOCAL_SERIAL => 'local serial',
+        Cassandra::CONSISTENCY_LOCAL_ONE => 'local one',
     ];
 
     /**
