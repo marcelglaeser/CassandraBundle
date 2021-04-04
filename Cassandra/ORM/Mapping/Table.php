@@ -49,13 +49,13 @@ final class Table extends Annotation
         'comment' => null,
         'speculative_retry' => null,
         'additional_write_policy' => null,
-        'gc_grace_seconds' => null,
+        'gc_grace_seconds' => 864000,
         'bloom_filter_fp_chance' => null,
-        'default_time_to_live' => null,
+        'default_time_to_live' => 0,
         'compaction' => null,
         'compression' => null,
         'caching' => null,
-        'memtable_flush_period_in_ms' => null,
+        'memtable_flush_period_in_ms' => 0,
         'read_repair' => null,
     ];
 }
