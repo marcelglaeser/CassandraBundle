@@ -50,7 +50,7 @@ final class Table extends Annotation
         'speculative_retry' => null,
         'additional_write_policy' => null,
         'gc_grace_seconds' => 864000,
-        'bloom_filter_fp_chance' => null,
+        'bloom_filter_fp_chance' => 0.01,
         'default_time_to_live' => 0,
         'compaction' => null,
         'compression' => null,
